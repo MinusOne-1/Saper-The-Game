@@ -62,38 +62,33 @@ class SaperGame:
                     self.map_bool[x][y] = 'c'
                     return 'make close'
                 else:
-                    self.map_bool[x][y] = 'o'
-                    if self.map_[x][y] == self.bomb:
+                    if self.map_[x][y] == self.bomb and not after_the_num:
                         self.playr_die = True
+                        self.map_bool[x][y] = 'o'
                         return 'You are lose'
+                    self.map_bool[x][y] = 'o'
                     # раскрываем все пустые клетки вокруг.
                     # не должно войти в рекурсивный ад
                     # т.к. это всё делается только если
                     # клетка закрыта, а
                     # преддущая клетка уже открыта
-                    if self.map_[x][y] != self.bomb and not after_the_num:
+                    if self.map_[x][y] == 0:
                         if x + 1 < len(self.map_[0]):
                             if y + 1 < len(self.map_):
-                                if self.map_[x + 1][y + 1] == 0:
-                                    self.player_check_point(x + 1, y + 1, operation, bool(self.map_[x][y]))
-                                if self.map_[x][y + 1] == 0:
-                                    self.player_check_point(x, y + 1, operation, bool(self.map_[x][y]))
-                            if self.map_[x + 1][y] == 0:
-                                self.player_check_point(x + 1, y, operation, bool(self.map_[x][y]))
+                                self.player_check_point(x + 1, y + 1, operation, True)
+                            self.player_check_point(x + 1, y, operation, True)
                             if y - 1 >= 0:
-                                if self.map_[x + 1][y - 1] == 0:
-                                    self.player_check_point(x + 1, y - 1, operation, bool(self.map_[x][y]))
-                                if self.map_[x][y - 1] == 0:
-                                    self.player_check_point(x, y - 1, operation, bool(self.map_[x][y]))
+                                self.player_check_point(x + 1, y - 1, operation, True)
+                        if y + 1 < len(self.map_):
+                            self.player_check_point(x, y + 1, operation, True)
+                        if y - 1 >= 0:
+                            self.player_check_point(x, y - 1, operation, True)
                         if x - 1 >= 0:
                             if y - 1 >= 0:
-                                if self.map_[x - 1][y - 1] == 0:
-                                    self.player_check_point(x - 1, y - 1, operation, bool(self.map_[x][y]))
-                            if self.map_[x - 1][y] == 0:
-                                self.player_check_point(x - 1, y, operation, bool(self.map_[x][y]))
+                                self.player_check_point(x - 1, y - 1, operation, True)
+                            self.player_check_point(x - 1, y, operation, True)
                             if y + 1 < len(self.map_):
-                                if self.map_[x - 1][y + 1] != self.bomb:
-                                    self.player_check_point(x - 1, y + 1, operation, bool(self.map_[x][y]))
+                                self.player_check_point(x - 1, y + 1, operation, True)
                     return 'make open'
             if operation == 'flag':
                 self.map_bool[x][y] = 'f'
